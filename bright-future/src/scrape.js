@@ -32,7 +32,6 @@ export async function fetchData(longitude, latitude) {
     const res = await fetch(url, {
         headers: {
             "Accept": "application/json",
-            "User-Agent": "Danny-fetchData/1.0 (+https://power.larc.nasa.gov/)",
         },
     });
 
