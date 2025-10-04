@@ -41,7 +41,7 @@ function App() {
         type="text"
         value={currentDate}
         onChange={(e) => setCurrentDate(e.target.value)}
-        placeholder="Date (YYYY/MM/DD)"
+        placeholder="Date (MM/DD)"
         style={{
           padding: "8px",
           fontSize: "16px",
@@ -52,7 +52,20 @@ function App() {
 
       {/* Second button instead of textbox */}
       <button
-      onClick={() => alert("button works")}
+      onClick={() => {
+
+        const inDate = currentDate 
+
+        const parts = countryAndCity.split(",")
+        const inCountry = parts[1].trim()
+        const inCity = parts[0].trim()
+        
+        const RainOrNot = []
+
+
+        alert(inCountry)
+
+      }}
       style={{
       padding: "8px",
       fontSize: "16px",
