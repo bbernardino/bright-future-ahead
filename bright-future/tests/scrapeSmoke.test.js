@@ -3,32 +3,34 @@ import assert from 'node:assert/strict';
 
 import { fetchData } from '../src/scrape.js';
 
-test('fetchData logs the parsed NASA payload', async () => {
-    const originalFetch = globalThis.fetch;
-    const originalConsoleLog = console.log;
+test('fetchData returns climate matrices from NASA POWER API', async () => {
+    const result = await fetchData(-79.3832, 43.6532);
 
-    const capturedLogs = [];
-    console.log = (...args) => {
-        capturedLogs.push(args);
-        originalConsoleLog(...args);
-    };
+    assert.equal(Array.isArray(result.temp), true, 'temp should be an array of days');
+    assert.equal(Array.isArray(result.precip), true, 'precip should be an array of days');
+    assert.equal(Array.isArray(result.years), true, 'years should be an array');
 
-    globalThis.fetch = async (url) => ({
-        json: async () => ({ ok: true, url }),
-    });
+    assert.equal(result.temp.length, 366, 'temp should cover every day of the year');
+    assert.equal(result.precip.length, 366, 'precip should cover every day of the year');
+    assert.ok(result.years.length > 0, 'years should include at least one entry');
 
-    try {
-        const result = await fetchData(-79.3832, 43.6532);
+    assert.equal(result.temp[0].length, result.years.length, 'temp matrix width should match years length');
+    assert.equal(result.precip[0].length, result.years.length, 'precip matrix width should match years length');
 
-        assert.equal(result.ok, true);
-        assert.equal(capturedLogs.length, 1);
-        assert.equal(capturedLogs[0].length, 1);
+    const sampleTempRow = result.temp.find((row) => row.some((value) => value !== null));
+    assert.ok(sampleTempRow, 'expected at least one temperature reading');
+    const sampleTempValue = sampleTempRow.find((value) => value !== null);
+    assert.equal(typeof sampleTempValue, 'number', 'temperature readings should be numbers');
 
-        const [payload] = capturedLogs[0];
-        assert.equal(payload.ok, true);
-        assert.match(payload.url, /power\.larc\.nasa\.gov/);
-    } finally {
-        globalThis.fetch = originalFetch;
-        console.log = originalConsoleLog;
-    }
+    const samplePrecipRow = result.precip.find((row) => row.some((value) => value !== null));
+    assert.ok(samplePrecipRow, 'expected at least one precipitation reading');
+    const samplePrecipValue = samplePrecipRow.find((value) => value !== null);
+    assert.equal(typeof samplePrecipValue, 'number', 'precipitation readings should be numbers');
+
+    const firstYear = result.years[0];
+    const lastYear = result.years[result.years.length - 1];
+    const currentYear = new Date().getUTCFullYear();
+    assert.ok(firstYear >= 1981, 'data should not precede 1981');
+    assert.ok(lastYear <= currentYear, 'data should not exceed current year');
+    console.log(result.temp);
 });
