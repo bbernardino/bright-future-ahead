@@ -7,8 +7,8 @@ import './App.css'
 function App() {
   const [count, setCount] = useState(0)
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [countryAndCity, setCountryAndCity] = useState("");
+  const [currentDate, setCurrentDate] = useState("");
 
   return (
     
@@ -23,8 +23,8 @@ function App() {
       {/* First textbox */}
       <input
         type="text"
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
+        value={countryAndCity}
+        onChange={(e) => setCountryAndCity(e.target.value)}
         placeholder="Location (City, Country)"
         style={{
           padding: "8px",
@@ -39,8 +39,8 @@ function App() {
       {/* Second textbox */}
       <input
         type="text"
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
+        value={currentDate}
+        onChange={(e) => setCurrentDate(e.target.value)}
         placeholder="Date (MM/DD)"
         style={{
           padding: "8px",
@@ -50,33 +50,39 @@ function App() {
         }}
       />
 
+      {/* Second button instead of textbox */}
+      <button
+      onClick={() => {
+
+        const inDate = currentDate 
+
+        const parts = countryAndCity.split(",")
+        const inCountry = parts[1].trim()
+        const inCity = parts[0].trim()
+        
+        const RainOrNot = []
+
+
+        alert(inCountry)
+
+      }}
+      style={{
+      padding: "8px",
+      fontSize: "16px",
+      borderRadius: "6px",
+      border: "1px solid #ccc",
+      backgroundColor: "#5047cfff",
+      cursor: "pointer",
+      }}
+      >
+      Click For Weather
+      </button>
+
       <p>
-        The NASA weather data base will be searched for: <b>{firstName} on {lastName}</b>
+        The NASA weather data base will be searched for: <b>{countryAndCity} on {currentDate}</b>
       </p>
     </div>
-  );
-
-  return (
-    <>
-      <h1>Welcome to Bright Future</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div> 
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-    
-  )
-
-
-  
-  
+  );  
 }
 
 
