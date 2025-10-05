@@ -4,6 +4,9 @@ import Sunlight from './assets/Images/Sunlight.jpg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+import { fetchData } from '../src/scrape.js';
+import { getPValue } from '../src/spencer.js';
+
 function App() {
   const [count, setCount] = useState(0)
 
@@ -52,22 +55,24 @@ function App() {
 
       {/* Second button instead of textbox */}
       <button
-      onClick={() => {
-
-        const inDate = currentDate 
+      onClick={async () => { 
 
         const parts = countryAndCity.split(",")
         const inCountry = parts[1].trim()
         const inCity = parts[0].trim()
-        
-        const RainOrNot = []
 
         const part = currentDate.split("/"); // splits into ["12", "34"]
         const month = Number(part[0]);
         const day = Number(part[1]);
 
+        const longitude = -80.25;  // example: Guelph, ON
+        const latitude = 43.55;
 
-        alert(day)
+        const { temp, precip, years } = await fetchData(longitude, latitude);
+
+        const pVal = await getPValue(precip, month, day);
+
+        alert("Probability of rain is: " + pVal)
 
       }}
       style={{

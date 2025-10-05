@@ -3,7 +3,7 @@
  * Fetches climate data from NASA's POWER API for given coordinates and formats the data s.t. [day][year]
  * @param {Number} longitude 
  * @param {Number} latitude 
- * @returns { temp: Array<Array<Number|null>>, precip: Array<Array<Number|null>>, years: Array<Number> } Precip in mm/day, temp in °C. 2D array where first dimension is days, second dimension is time series in years for the date historical.
+ * @returns { Promise<{temp: Array<Array<Number|null>>, precip: Array<Array<Number|null>>, years: Array<Number> }> Precip in mm/day, temp in °C. 2D array where first dimension is days, second dimension is time series in years for the date historical.
  */
 export async function fetchData(longitude, latitude) {
     // POWER Daily coverage & time-standard (UTC/LST) per docs.
@@ -42,7 +42,8 @@ export async function fetchData(longitude, latitude) {
 
     const data = await res.json();
 
-    const t2m = data?.properties?.parameter?.T2M ?? {};
+    //what is going on here???
+    const t2m = data?.properties?.parameter?.T2M ?? {}; 
     const pr = data?.properties?.parameter?.PRECTOTCORR ?? {};
     const dateKeys = Object.keys(t2m).length ? Object.keys(t2m) : Object.keys(pr);
     if (dateKeys.length === 0) {
