@@ -62,8 +62,12 @@ function App() {
         
         const RainOrNot = []
 
+        const part = currentDate.split("/"); // splits into ["12", "34"]
+        const month = Number(part[0]);
+        const day = Number(part[1]);
 
-        alert(inCountry)
+
+        alert(day)
 
       }}
       style={{
@@ -79,7 +83,7 @@ function App() {
       </button>
 
       <p>
-        The NASA weather data base will be searched for: <b>{countryAndCity} on {currentDate}</b>
+        The NASA weather data base will be searched for: <b>{countryAndCity} {currentDate}</b>
       </p>
     </div>
   );  
